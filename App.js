@@ -1,22 +1,35 @@
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, KeyboardAvoidingView, TextInput, TouchableOpacity } from 'react-native';
 import Task from './components/Task';
 
 export default function App() {
-  const handleTask = () => { }
+  const [task, setTask] = useState('');
+  const [taskItems, setTaskItems] = useState([]);
+
+  const handleAddTask = () => {
+    setTaskItems([...taskItems, task]);
+    setTask('');
+  }
   return (
     <View style={styles.container}>
       <View style={styles.taskWrapper}>
         <Text style={styles.sectionTitle}>Tytuł taska!</Text>
         <View style={styles.items}>
-          <Task text="Task 1"></Task>
-          <Task text="Task 2"></Task>
-          <Task text="Task 3"></Task>
+          {
+            taskItems.map((item, index) => {
+              return (
+                <TouchableOpacity key={index}>
+                  <Task text={item} />
+                </TouchableOpacity>
+              )
+            })
+          }
         </View>
       </View>
 
       <KeyboardAvoidingView style={styles.writeTaskWrapper}>
-        <TextInput style={styles.input} placeholder={'Write a task'} />
-        <TouchableOpacity onPress={() => handleTask()}>
+        <TextInput style={styles.input} placeholder={'Write a task'} value={task} onChangeText={(text) => setTask(text)} />
+        <TouchableOpacity onPress={() => handleAddTask()}>
           <View style={styles.addWrapper}>
             <Text style={styles.addText}>+</Text>
           </View>
